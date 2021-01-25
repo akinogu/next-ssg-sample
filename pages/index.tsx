@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 
+const prefectures = [{ id: '09', name: '栃木' }, { id: '20', name: '長野' }, { id: '30', name: '和歌山' }]
 export default function Home({ areas }) {
   const [input, setInput] = useState('')
   const [currentAreas, setCurrentAreas] = useState(areas)
@@ -28,6 +29,7 @@ export default function Home({ areas }) {
         <input id='prefCode' type='text' value={input} onChange={e => setInput(e.target.value)} />
 
         <button onClick={search}>検索</button>
+        <a href='/prefecture/list'>都道府県一覧</a>
         <ul>
           {currentAreas.map(area => {
             return (
