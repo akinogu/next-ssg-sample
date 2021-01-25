@@ -1,19 +1,17 @@
-import { useEffect } from 'react'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import styles from '../../styles/Home.module.css'
 
-export default function Home(props) {
-  console.log('props', props)
+export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>hoge</title>
+        <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          {new Date().toISOString()}
+          Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
         <p className={styles.description}>
@@ -65,19 +63,3 @@ export default function Home(props) {
     </div>
   )
 }
-
-export async function getStaticProps() {
-  // Call an external API endpoint to get posts
-  const res = await fetch('https://www.land.mlit.go.jp/webland/api/CitySearch?area=13')
-  const area = await res.json()
-  console.log('res', area)
-
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
-  return {
-    props: {
-      area,
-    },
-  }
-}
-
