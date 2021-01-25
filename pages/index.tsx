@@ -1,67 +1,41 @@
-import { useEffect } from 'react'
+import { useState } from 'react'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 
-export default function Home(props) {
-  console.log('props', props)
+export default function Home({ areas }) {
+  const [input, setInput] = useState('')
+  const [currentAreas, setCurrentAreas] = useState(areas)
+
+  const search = async () => {
+    const res = await fetch(`https://www.land.mlit.go.jp/webland/api/CitySearch?area=${input}`)
+    const resJson = await res.json()
+    const areas = resJson?.data ?? []
+    setCurrentAreas(areas)
+  }
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>hoge</title>
+        <title>Next SST</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          {new Date().toISOString()}
+          {new Date().toLocaleTimeString()}
         </h1>
+        <label htmlFor='prefCode'>都道府県コード</label>
+        <input id='prefCode' type='text' value={input} onChange={e => setInput(e.target.value)} />
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+        <button onClick={search}>検索</button>
+        <ul>
+          {currentAreas.map(area => {
+            return (
+              <li key={area.id}>{area.name}</li>
+            )
+          })}
+        </ul>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
     </div>
   )
 }
@@ -69,14 +43,15 @@ export default function Home(props) {
 export async function getStaticProps() {
   // Call an external API endpoint to get posts
   const res = await fetch('https://www.land.mlit.go.jp/webland/api/CitySearch?area=13')
-  const area = await res.json()
-  console.log('res', area)
+  const resJson = await res.json()
+  const areas = resJson?.data ?? []
+  console.log('res', resJson?.data)
 
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
   return {
     props: {
-      area,
+      areas,
     },
   }
 }
