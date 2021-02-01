@@ -23,10 +23,10 @@ export default function Home({ areas, time }) {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
+        <div className={styles.title}>
           {new Date().toLocaleTimeString()}
-          {time}
-        </h1>
+        </div>
+        <div>{time}</div>
         <label htmlFor='prefCode'>都道府県コード</label>
         <input id='prefCode' type='text' value={input} onChange={e => setInput(e.target.value)} />
 
