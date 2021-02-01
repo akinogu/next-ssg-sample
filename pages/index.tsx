@@ -3,7 +3,8 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 
 const prefectures = [{ id: '09', name: '栃木' }, { id: '20', name: '長野' }, { id: '30', name: '和歌山' }]
-export default function Home({ areas }) {
+
+export default function Home({ areas, time }) {
   const [input, setInput] = useState('')
   const [currentAreas, setCurrentAreas] = useState(areas)
 
@@ -17,13 +18,14 @@ export default function Home({ areas }) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Next SST</title>
+        <title>Next SSG</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
           {new Date().toLocaleTimeString()}
+          {time}
         </h1>
         <label htmlFor='prefCode'>都道府県コード</label>
         <input id='prefCode' type='text' value={input} onChange={e => setInput(e.target.value)} />
@@ -54,6 +56,7 @@ export async function getStaticProps() {
   return {
     props: {
       areas,
+      time: new Date().toLocaleTimeString()
     },
   }
 }
